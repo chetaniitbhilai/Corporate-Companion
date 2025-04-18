@@ -1,0 +1,53 @@
+COMPANY POLICIES :
+At This Tech Pvt. Ltd., we are committed to fostering a professional, inclusive, and productive work environment. 
+Our standard working hours are from 9:00 AM to 5:00 PM, Monday through Friday, 
+with flexibility for remote work up to two days a week upon managerial approval. 
+Employees are expected to log in before 10:00 AM and adhere to punctuality. 
+Leave entitlements include 12 paid leaves, 10 casual leaves, and 8 sick leaves annually, with requests to be submitted at least two days in advance through the HR portal. 
+We maintain a zero-tolerance policy towards any form of harassment, discrimination, or unethical behavior. 
+All employees must uphold confidentiality, especially when dealing with company data and intellectual property, and are required to use only authorized software and secure their systems with two-factor authentication. 
+Additionally, employees should refrain from posting sensitive information on social media and are encouraged to separate personal opinions from professional representation. 
+Any potential conflicts of interest must be disclosed to HR. 
+In case of resignation, a 30-day notice period is mandatory, and all company assets must be returned in proper condition.
+
+
+
+UPCOMING_HOLIDAYS
+May 12 (Monday) – Buddha Purnima
+
+
+UPCOMING_EVENTS
+Date | Event | Type
+April 19 | Team Building Games | Employee Engagement
+April 22 | Earth Day CSR Drive (Tree Plantation) | CSR / Wellness
+April 26 | New Joiner Welcome & Orientation | HR / Onboarding
+
+
+TEAM
+Employee,Team
+Alice Johnson,HR
+Bob Smith,Tech
+Charlie Lee,Marketing
+Diana Ross,Marketing
+Evan Brown,Finance
+Fiona Davis,HR
+George Miller,Tech
+Hannah Wilson,Finance
+Ian Thompson,Marketing
+Jenny White,Marketing
+
+
+PROEJCT_SUMMARY
+Project 1: Employee Productivity Dashboard
+Summary:
+This project involved designing a centralized dashboard to visualize employee productivity metrics across departments. The dashboard aggregates data from tools like Jira, Slack, and Google Calendar to provide insights into task completion rates, meeting hours, and active project timelines. It supports role-based views, weekly email digests, and real-time alerts for delays or low engagement. The goal was to enable managers to make data-driven decisions and support team optimization.
+Duration: February 2025 – April 2025
+Team Size: 4
+Technologies: ReactJS, Node.js, MongoDB, Chart.js, REST APIs
+
+Project 2: Inventory Optimization System
+Summary:
+This project focused on streamlining warehouse inventory management through predictive analytics. A smart dashboard was developed to monitor stock levels in real time, flag surplus or low-stock items, and forecast future demand using historical data trends. The system integrates with the company’s ERP and automates reorder requests to vendors. As a result, inventory costs were reduced by 18%, and stockouts were minimized.
+Duration: December 2024 – March 2025
+Team Size: 5
+Technologies: Python, Power BI, MySQL, Pandas, Flask
