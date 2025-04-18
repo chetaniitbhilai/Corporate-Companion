@@ -52,6 +52,17 @@ In env file set Gemini api key
 GEMINI_API_KEY = YOUR_KEY
 ```
 
+## Sample Prompts
+``` bash
+Schedule a meet with Alice on 22nd 
+Schedule a meet with HR team 
+Tell me about company policy 
+Organise the files
+Tell me about myself
+Tell me my id 
+Tell me about upcoming holidays
+```
+
 ## 📹 Demo Preview
 Watch the application in action in `demo.mp4`.
 
