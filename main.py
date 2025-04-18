@@ -8,21 +8,20 @@ from user_management import UserManager
 from meeting_schedular import MeetingScheduler
 from file_organiser import FileOrganisation
 from company_news import CompanyNews
-# Load environment variables for API keys
+
 load_dotenv()
 
 class CorporateCompanion:
     def __init__(self):
-        # Initialize API key
+        
         self.gemini_api_key = os.getenv("GEMINI_API_KEY")
         
-        # Initialize components
         self.user_manager = UserManager()
         self.scheduler = MeetingScheduler(genai_api_key=self.gemini_api_key)
         self.organiser = FileOrganisation(genai_api_key=self.gemini_api_key)
         self.company_news = CompanyNews(genai_api_key=self.gemini_api_key)
         
-        # Initialize Gemini model
+        
         try:
             import google.generativeai as genai
             genai.configure(api_key=self.gemini_api_key)
@@ -89,7 +88,7 @@ Be very specific when extracting the 'field' parameter for USER_INFO intent. Loo
 Return only the JSON object, no additional text.
 """     
         try:
-            # Get context info that might help Gemini make better decisions
+            
             context = f"""
             User name: {user_data['name']}
             Department: {user_data['department']}
@@ -100,12 +99,12 @@ Return only the JSON object, no additional text.
             chat = self.model.start_chat(history=[])
             response = chat.send_message(f"{system_prompt}\n\nContext:\n{context}\n\nUser query: {query}")
             
-            # Extract JSON from response
+            
             json_match = re.search(r'\{.*\}', response.text, re.DOTALL)
             if json_match:
                 intent_data = json.loads(json_match.group(0))
                 
-                # Route based on intent
+                
                 intent = intent_data.get("intent", "GENERAL_QUERY")
                 print(intent)
                 if intent == "MEETING_SCHEDULER":
@@ -128,18 +127,18 @@ Return only the JSON object, no additional text.
 
     def handle_user_info_query(self, intent_data, user_data):
         """Handle queries about user information"""
-        print("Intent data received:", intent_data)  # Debug print
+        print("Intent data received:", intent_data)  
         
-        # Get the description to help identify the intent better
+        
         description = intent_data.get("description", "").lower()
         
-        # Extract parameters
+        
         parameters = intent_data.get("parameters", {})
         requested_field = parameters.get("field", "").lower()
         
-        # If no field parameter was found, try to extract it from the description
+        
         if not requested_field and description:
-            # Check for common patterns in the description
+            
             if "phone" in description:
                 requested_field = "phone"
             elif "email" in description:
@@ -153,9 +152,9 @@ Return only the JSON object, no additional text.
             elif "office" in description or "location" in description:
                 requested_field = "office_location"
         
-        print(f"Requested field identified: {requested_field}")  # Debug print
+        print(f"Requested field identified: {requested_field}")  
         
-        # Map common field names to actual user_data keys
+        
         field_mapping = {
             "name": "name",
             "email": "email",
@@ -173,19 +172,19 @@ Return only the JSON object, no additional text.
             "office location": "office_location"
         }
         
-        # Try to map the requested field to an actual field
+        
         actual_field = None
         if requested_field:
             actual_field = field_mapping.get(requested_field.replace(" ", "").lower())
         
-        print(f"Actual field mapped: {actual_field}")  # Debug print
+        print(f"Actual field mapped: {actual_field}")  
         
-        # If a specific field was requested and found, return just that info
+        
         if actual_field and actual_field in user_data:
             field_name = actual_field.replace("_", " ").title()
             return f"Your {field_name}: {user_data[actual_field]}"
         else:
-            # If extracting from the description also failed, return all user inf
+            
             info_text = "📄 *Here's the information you requested:*\n\n"
             info_text += f"👤 **Name**: {user_data.get('name', 'Not provided')}\n\n"
             info_text += f"📧 **Email**: {user_data.get('email', 'Not provided')}\n\n"
@@ -197,67 +196,6 @@ Return only the JSON object, no additional text.
             
             return info_text
 
-
-
-    # def handle_user_info_query(self, intent_data, user_data):
-    #     """Handle queries about user information"""
-    #     # description = intent_data.get("description", "")
-    #     # print(intent_data)
-    #     print(user_data)
-    #     # Generate a friendly response about user info
-    #     info_text = f"Here's the information you requested:\n\n"
-
-
-    #     system_prompt = f"""
-    #     You are a general query agent here are the details about what user has queried. 
-    #     These are the use details.
-    #     {user_data}
-    #     Return in JSON format like
-    #     """+"""{
-    #         "phone": "phone_number_extracted"
-    #     }
-    #     """
-        
-    #     try:
-    #         chat = self.model.start_chat(history=[])
-    #         response = chat.send_message(f"{system_prompt}")
-    #     except:
-    #         print("issue in the key")
-            
-        
-    #     # Check for specific parameters that might have been extracted
-    #     parameters = intent_data.get("parameters", {})
-    #     requested_field = parameters.get("field", "").lower()
-        
-    #     # Map common field names to actual user_data keys
-    #     field_mapping = {
-    #         "name": "name",
-    #         "email": "email",
-    #         "phone": "phone",
-    #         "department": "department",
-    #         "employee_id": "employee_id",
-    #         "office_location": "office_location"
-    #     }
-        
-    #     # Try to map the requested field to an actual field
-    #     actual_field = field_mapping.get(requested_field.replace(" ", "").lower())
-        
-    #     if actual_field and actual_field in user_data:
-    #         # Return specific requested field
-    #         field_name = actual_field.replace("_", " ").title()
-    #         return f"Your {field_name}: {user_data[actual_field]}\n "
-    #     else:
-    #         # If no specific field was identified or it doesn't exist, return a general response
-    #         # with some basic user info
-    #         info_text += f"Name: {user_data['name']}\n"
-    #         info_text += f"Email: {user_data['email']}\n"
-    #         info_text += f"Phone Number: {user_data['phone']}\n"
-    #         info_text += f"Department: {user_data['department']}\n"
-    #         info_text += f"Employee ID: {user_data['employee_id']}\n"
-    #         info_text += f"Office Location: {user_data['office_location']}\n"
-            
-            
-    #         return info_text
     
     def handle_general_query(self, query, user_data):
         """Handle general queries and small talk"""
@@ -282,7 +220,7 @@ Return only the JSON object, no additional text.
         """
         
         try:
-            # Generate response from Gemini
+            
             chat = self.model.start_chat(history=[])
             response = chat.send_message(f"{system_prompt}\n\nUser query: {query}")
             return response.text
@@ -293,21 +231,21 @@ Return only the JSON object, no additional text.
         """Main entry point for processing user queries"""
         return self.process_intent(query, user_data)
 
-# Initialize Streamlit app
+
 st.set_page_config(
     page_title="Corporate Companion",
     page_icon="💼",
     layout="centered"
 )
 
-# Initialize the companion
+
 @st.cache_resource
 def get_companion():
     return CorporateCompanion()
 
 companion = get_companion()
 
-# Session state management
+
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
 if 'user_data' not in st.session_state:
@@ -315,13 +253,13 @@ if 'user_data' not in st.session_state:
 if 'chat_history' not in st.session_state:
     st.session_state.chat_history = []
 
-# App header
+
 st.title("💼 Corporate Companion")
 st.subheader("An LLM-based Chatbot for Employee Assistance")
 
-# Main app logic
+
 if not st.session_state.logged_in:
-    # Login/Register tabs
+    
     tab1, tab2 = st.tabs(["Login", "Register"])
     
     with tab1:
@@ -373,60 +311,57 @@ if not st.session_state.logged_in:
                     else:
                         st.error(result)
 else:
-    # User is logged in - show the main interface
+    
     user_data = st.session_state.user_data
     
-    # Sidebar with user info
+    
     with st.sidebar:
         st.subheader(f"Welcome, {user_data['name']}")
         st.write(f"**Department:** {user_data['department']}")
         st.write(f"**Office:** {user_data['office_location']}")
         
-        # Display schedule
-        # st.subheader("Your Schedule")
-        # schedule = companion.get_my_schedule(user_data['name'])
-        # if schedule:
-        #     current_date = None
-        #     for meeting in schedule:
-        #         if current_date != meeting["date"]:
-        #             st.write(f"**{meeting['day']}**")
-        #             current_date = meeting["date"]
-        #         st.write(f"• {meeting['time']}: {meeting['description']}")
-        # else:
-        #     st.write("No upcoming meetings")
+        st.subheader("Your Schedule")
+        schedule = companion.get_my_schedule(user_data['name'])
+        if schedule:
+            current_date = None
+            for meeting in schedule:
+                if current_date != meeting["date"]:
+                    st.write(f"**{meeting['day']}**")
+                    current_date = meeting["date"]
+                st.write(f"• {meeting['time']}: {meeting['description']}")
+        else:
+            st.write("No upcoming meetings")
         
-        # Logout button
         if st.button("Logout"):
             st.session_state.logged_in = False
             st.session_state.user_data = None
             st.session_state.chat_history = []
             st.rerun()
     
-    # Main chat interface
+
     st.header("Chat with your Corporate Companion")
     
-    # Display chat history
+    
     for message in st.session_state.chat_history:
         if message["role"] == "user":
             st.chat_message("user").write(message["content"])
         else:
             st.chat_message("assistant").write(message["content"])
     
-    # Chat input
+    
     user_query = st.chat_input("Ask me anything or type a command...")
     if user_query:
-        # Add user message to chat history
+        
         st.session_state.chat_history.append({"role": "user", "content": user_query})
         st.chat_message("user").write(user_query)
         
-        # Get response from the companion
+        
         assistant_response = companion.get_nlp_response(user_query, user_data)
         
-        # Add assistant response to chat history
+        
         st.session_state.chat_history.append({"role": "assistant", "content": assistant_response})
         st.chat_message("assistant").write(assistant_response)
 
-# Add info about what the companion can do
 if not st.session_state.logged_in:
     st.markdown("""
     ## Features
@@ -435,12 +370,11 @@ if not st.session_state.logged_in:
     - **Natural Language**: Use normal language to ask questions and schedule meetings
     
     ### Example Commands
-    - "Schedule a meeting with the Marketing team tomorrow at 2 PM"
-    - "Set up a meeting with John as soon as possible"
-    - "Show me my schedule for this week"
+    - "Schedule a meeting with the Marketing on 24th"
+    - "Tell me the upcoming holidays"
     - "What's my employee ID?"
     """)
 
 if __name__ == "__main__":
-    # This will run when the script is executed directly
+    
     pass

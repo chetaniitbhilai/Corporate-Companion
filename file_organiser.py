@@ -1,4 +1,4 @@
-# meeting_scheduler.py
+
 import os
 import json
 import re
@@ -9,16 +9,13 @@ from datetime import datetime, timedelta
 import google.generativeai as genai
 import shutil
 
-# print(os.path.exists("employee_schedules.csv"))
-# raw_schedules = pd.read_csv("employee_schedules.csv")
-# print(raw_schedules)
 class FileOrganisation:
     def __init__(self, genai_api_key=None):
-        # Class variables for raw CSVs
+        
         self.raw_teams_csv = None
         self.raw_schedules_csv = None
 
-        # Initialize Gemini API
+        
         self.model = None
         if genai_api_key:
             try:
@@ -30,17 +27,17 @@ class FileOrganisation:
     def organise_files(self, intent_data, user_data):
         print(intent_data, user_data)
 
-        # Step 1: List all files in the 'files' directory
+        
         directory = "files"
         file_list = os.listdir(directory)
         file_list = [f for f in file_list if os.path.isfile(os.path.join(directory, f))]
 
-        # Save file names to a file (optional, for record)
+        
         with open("file_list.txt", "w") as f:
             for file in file_list:
                 f.write(file + "\n")
 
-        # Step 2: Ask Gemini to classify each file
+        
         if not self.model:
             print("Gemini model not initialized.")
             return
@@ -53,7 +50,7 @@ class FileOrganisation:
             response = self.model.generate_content(prompt)
             result = response.text.strip()
             print(result)
-            # Use regex to extract JSON from response
+            
             json_match = re.search(r'\{.*\}', result, re.DOTALL)
             if not json_match:
                 print("No valid JSON found in Gemini response.")
