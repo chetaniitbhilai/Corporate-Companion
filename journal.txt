@@ -1,0 +1,11 @@
+Umm there are several issues that I faced while making this 
+
+If I was using the agent to find optimal time directly with giving the schedules and people names requested, it still was leading to an issue so rathre I switched to manual mode to set the issue.
+I have made it such that it will book on a particular date if mentioned otherwise it will book a meet today. 
+There is  a file stuff.txt that ahs various things related to company like policies, holidays, projects etc.
+The agent gets the data from that file and prints the output. 
+
+
+Some things that can be improved is that:
+The user should be able to know if when the particular person is available rather than just finding the optimal slot. 
+More functionalities could be added. 
