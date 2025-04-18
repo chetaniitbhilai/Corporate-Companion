@@ -22,7 +22,7 @@ class FileOrganisation:
         self.model = None
         if genai_api_key:
             try:
-                genai.configure(api_key="AIzaSyDF1XCJo8Ko6RP6TNgxDGJSDYuydAqw9Ow")
+                genai.configure(api_key=genai_api_key)
                 self.model = genai.GenerativeModel('gemini-2.0-flash')
             except Exception as e:
                 print(f"Error initializing Gemini API: {e}")
